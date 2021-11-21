@@ -16,13 +16,9 @@ exports.createTask = async (req, res) => {
 
         const projectExists = await Project.findById(project)
 
-        if (!projectExists) {
-            return res.status(404).json({ msg: 'Project not found' })
-        }
+        if (!projectExists) return res.status(404).json({ msg: 'Project not found' })
 
-        if (projectExists.userCreator.toString() !== req.user.id) {
-            return res.status(401).json({ msg: 'Not authorized' })
-        }
+        if (projectExists.userCreator.toString() !== req.user.id) return res.status(401).json({ msg: 'Not authorized' })
 
         const task = new Task(req.body)
         await task.save()
@@ -40,13 +36,9 @@ exports.getTasks = async (req, res) => {
 
         const projectExists = await Project.findById(project)
 
-        if (!projectExists) {
-            return res.status(404).json({ msg: 'Project not found' })
-        }
+        if (!projectExists) return res.status(404).json({ msg: 'Project not found' })
 
-        if (projectExists.userCreator.toString() !== req.user.id) {
-            return res.status(401).json({ msg: 'Not authorized' })
-        }
+        if (projectExists.userCreator.toString() !== req.user.id) return res.status(401).json({ msg: 'Not authorized' })
 
         const tasks = await Task.find({ project })
         res.json(tasks)
@@ -65,14 +57,10 @@ exports.updateTask = async (req, res) => {
 
         const projectExists = await Project.findById(project)
 
-        if (!taskExist) {
-            return res.status(404).json({ msg: 'Task does not exist' })
-        }
-
-        if (projectExists.userCreator.toString() !== req.user.id) {
-            return res.status(401).json({ msg: 'Not authorized' })
-        }
-
+        if (!taskExist) return res.status(404).json({ msg: 'Task does not exist' })
+        
+        if (projectExists.userCreator.toString() !== req.user.id) return res.status(401).json({ msg: 'Not authorized' })
+        
         const newTask = {}
         if (name) newTask.name = name
         if (state) newTask.state = state
