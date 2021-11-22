@@ -77,8 +77,8 @@ exports.deleteProject = async (req, res) => {
             return res.status(401).json({ msg: 'Not authorized' })
         }
 
-        await Project.findOneAndRemove({_id: req.params.id})
-        res.json({msg: 'Project deleted'})
+        await Project.findOneAndRemove({ _id: req.params.id })
+        res.json({ msg: 'Project deleted' })
 
     } catch (error) {
         console.log(error)

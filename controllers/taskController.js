@@ -74,3 +74,24 @@ exports.updateTask = async (req, res) => {
         res.status(500).send('An error happened')
     }
 }
+
+exports.deleteTask = async (res, req) => {
+    try {
+        const { project} = req.body
+
+        let taskExist = await Task.findById(req.params.id)
+
+        const projectExists = await Project.findById(project)
+
+        if (!taskExist) return res.status(404).json({ msg: 'Task does not exist' })
+        
+        if (projectExists.userCreator.toString() !== req.user.id) return res.status(401).json({ msg: 'Not authorized' })
+        
+        await Task.findOneAndRemove({_id: req.params.id})
+        res.json({msg: 'Task deleted'})
+
+    } catch (error) {
+        console.log(error)
+        res.status(500).send('An error happened')
+    }
+}
